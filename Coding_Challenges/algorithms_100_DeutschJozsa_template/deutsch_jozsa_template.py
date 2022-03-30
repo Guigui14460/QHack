@@ -22,10 +22,17 @@ def deutsch_jozsa(oracle):
         # QHACK #
 
         # Insert any pre-oracle processing here
+        qml.X(2)
+        qml.Hadamard(2)
+        qml.Hadamard(0)
+        qml.Hadamard(1)
 
         oracle()  # DO NOT MODIFY this line
 
         # Insert any post-oracle processing here
+        qml.Hadamard(0)
+        qml.X(0)
+        qml.X(1)
 
         # QHACK #
 
@@ -36,6 +43,7 @@ def deutsch_jozsa(oracle):
     # QHACK #
 
     # From `sample` (a single call to the circuit), determine whether the function is constant or balanced.
+    return "balanced" if sample[0] != sample[1] else "constant"
 
     # QHACK #
 

@@ -29,7 +29,31 @@ def n_swaps(cnot):
     """
 
     # QHACK #
+    wire1, wire2 = cnot.wires
 
+    color = dict()
+    for v in graph:
+        color[v] = 'white'
+        
+    P = dict()
+    P[wire1] = None
+    color[wire1] = 'gray'
+    Q = [wire1]
+    while Q:
+        u = Q[0]
+        for v in graph[u]:
+            if color[v] == 'white':
+                P[v] = u
+                color[v] = 'gray'
+                Q.append(v)
+        Q.pop(0)
+        color[u] = 'black'
+    
+    count = 0
+    while P[wire2] != None:
+        count += 1
+        wire2 = P[wire2]
+    return (count - 1) * 2
     # QHACK #
 
 

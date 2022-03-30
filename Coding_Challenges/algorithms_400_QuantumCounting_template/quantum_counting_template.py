@@ -19,7 +19,9 @@ def oracle_matrix(indices):
     """
 
     # QHACK #
-
+    my_array = np.zeros((2 ** 4, 2 ** 4))
+    for i in indices:
+        my_array[i][i] = 1
     # QHACK #
 
     return my_array
@@ -56,11 +58,18 @@ def circuit(indices):
 
     # QHACK #
 
-    target_wires =
+    target_wires = indices
 
-    estimation_wires =
+    estimation_wires = [i for i in range(8) if i not in indices]
+
+    for wire in estimation_wires:
+        qml.Hadamard(wire)
+        qml.ControlledQubitUnitary(grover_operator(indices), control_wires=wire, wires=target_wires)
+    
+    qml.QFT(wires=estimation_wires).inv()
 
     # Build your circuit here
+    # qml.QuantumPhaseEstimation(grover_operator, target_wires, estimation_wires)
 
     # QHACK #
 
@@ -77,7 +86,9 @@ def number_of_solutions(indices):
     """
 
     # QHACK #
-
+    res = circuit(indices)
+    theta = (res.dot(1 << arange(res.shape[-1] - 1, -1, -1))) * np.pi / 8
+    return 16 * np.sin(theta / 2) ** 2
     # QHACK #
 
 def relative_error(indices):
@@ -92,7 +103,7 @@ def relative_error(indices):
 
     # QHACK #
 
-    rel_err = 
+    rel_err = (number_of_solutions(indices) - len(indices)) / len(indices) * 100
 
     # QHACK #
 

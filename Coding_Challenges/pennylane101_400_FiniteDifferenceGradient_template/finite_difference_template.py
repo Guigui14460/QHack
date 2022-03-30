@@ -21,7 +21,14 @@ def my_finite_diff_grad(params):
     gradients = np.zeros([len(params)])
     for i in range(len(params)):
         # QHACK # 
-
+        x = np.array(params[0])
+        delta = 0.0005
+        shift = np.zeros_like(x)
+        shift[i] += 0.5 * delta
+        gradient[i] = (
+            cost(params[:0] + [x + shift] + params[0 + 1:])
+            - f(params[:0] + [x - shift] + params[0 + 1:])
+        ) * delta**-1
         # QHACK #
 
     return gradients
